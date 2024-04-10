@@ -67,7 +67,7 @@
             "dist": {
                 "type": "path",
                 "url": "/repo/dianaphp/lib",
-                "reference": "28daf0c6bd673fafceb51ad576f026119c9e5644"
+                "reference": "6ebc29d5e3c070fe1dc360be13678f78bab7b4c0"
             },
             "require": {
                 "php": ">=8.3"
