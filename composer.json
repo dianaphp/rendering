@@ -1,0 +1,48 @@
+{
+    "name": "dianaphp/rendering",
+    "description": "the diana rendering package",
+    "keywords": [
+        "diana",
+        "php",
+        "framework"
+    ],
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Diana\\": "src/Diana/",
+            "Diana\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "phpunit"
+        ],
+        "post-update-cmd": [
+            "phpunit"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Antonio Ianzano",
+            "email": "ianzanoan@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../framework",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "ramsey/uuid": "*",
+        "dianaphp/lib": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
