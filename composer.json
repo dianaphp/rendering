@@ -28,15 +28,6 @@
             "email": "ianzanoan@gmail.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../framework",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "require": {
         "php": ">=8.3",
         "ramsey/uuid": "*",
