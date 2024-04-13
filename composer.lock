@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b45e73b689a3f66f2947fb4cb079081",
+    "content-hash": "a92207d54c9ef707693b9a34fbf99bca",
     "packages": [
         {
             "name": "brick/math",
@@ -1861,7 +1861,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "dianaphp/lib": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

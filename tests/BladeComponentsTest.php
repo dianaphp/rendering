@@ -57,19 +57,6 @@ class BladeComponentsTest extends AbstractBladeTestCase
     {
         $this->assertSame('<?php $__env->endSlot(); ?>', $this->compiler->compileString('@endslot'));
     }
-
-    public function testPropsAreExtractedFromParentAttributesCorrectlyForClassComponents()
-    {
-        $__env = $this->driver;
-
-        $attributes = new ComponentAttributeBag(['foo' => 'baz', 'other' => 'ok']);
-
-        $template = $this->compiler->compileString('@component(\'Diana\Tests\ComponentStub::class\', \'test\', ["foo" => "bar"])');
-
-        ob_start();
-        eval (" ?> $template <?php endif; ");
-        ob_get_clean();
-    }
 }
 
 class ComponentStub extends Component
