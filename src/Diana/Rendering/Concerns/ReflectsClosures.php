@@ -6,7 +6,7 @@ use Closure;
 
 use ReflectionFunction;
 use RuntimeException;
-use Diana\Support\Helpers\Util;
+use Diana\Support\Helpers\Data;
 use Diana\Support\Helpers\Arr;
 
 trait ReflectsClosures
@@ -53,7 +53,7 @@ trait ReflectsClosures
                 return [$parameter->getName() => null];
             }
 
-            return [$parameter->getName() => Util::getParameterClassNames($parameter)];
+            return [$parameter->getName() => Data::getParameterClassNames($parameter)];
         })));
 
         if (empty($types)) {
@@ -84,7 +84,7 @@ trait ReflectsClosures
                 return [$parameter->getName() => null];
             }
 
-            return [$parameter->getName() => Util::getParameterClassName($parameter)];
+            return [$parameter->getName() => Data::getParameterClassName($parameter)];
         });
     }
 }

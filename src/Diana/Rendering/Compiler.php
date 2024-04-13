@@ -626,9 +626,9 @@ class Compiler
         if (str_contains($match[1], '@')) {
             $match[0] = isset($match[3]) ? $match[1] . $match[3] : $match[1];
         } elseif (isset($this->customDirectives[$match[1]])) {
-            $match[0] = $this->callCustomDirective($match[1], Arr::get($match, 3));
+            $match[0] = $this->callCustomDirective($match[1], $match[3]);
         } elseif (method_exists($this, $method = 'compile' . ucfirst($match[1]))) {
-            $match[0] = $this->$method(Arr::get($match, 3));
+            $match[0] = $this->$method($match[3]);
         } else {
             return $match[0];
         }
@@ -648,7 +648,7 @@ class Compiler
         $value ??= '';
 
         if (str_starts_with($value, '(') && str_ends_with($value, ')')) {
-            $value = Str::substr($value, 1, -1);
+            $value = substr($value, 1, -1);
         }
 
         return call_user_func($this->customDirectives[$name], trim($value));

@@ -251,7 +251,7 @@ class ComponentTagCompiler
         // component and pass the component as a view parameter to the data so it
         // can be accessed within the component and we can render out the view.
         if (!class_exists($class)) {
-            $view = Filesystem::absPath('./' . Str::replace(':', '/', $component));
+            $view = Filesystem::absPath('./' . str_replace(':', '/', $component));
             if (file_exists($view))
                 $view = "'$view'";
             else
