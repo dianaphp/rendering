@@ -2,13 +2,13 @@
 
 namespace Diana\Rendering;
 
+use Diana\IO\Kernel;
 use Diana\Rendering\Components\Component;
 use Diana\Rendering\Components\DynamicComponent;
 use Diana\Rendering\Contracts\Renderer;
 use Diana\Rendering\Engines\CompilerEngine;
 use Diana\Rendering\Engines\FileEngine;
 use Diana\Rendering\Engines\PhpEngine;
-use Diana\Runtime\Application;
 use Diana\Runtime\Container;
 use Diana\Runtime\Package;
 use Diana\Support\Helpers\Filesystem;
@@ -58,7 +58,7 @@ class RenderingPackage extends Package
         return true;
     }
 
-    public function __construct(Container $container, Application $app)
+    public function __construct(Container $container, Kernel $kernel)
     {
         $this->loadConfig();
 
@@ -101,7 +101,7 @@ class RenderingPackage extends Package
         $renderer->registerEngine('php', PhpEngine::class);
         $renderer->registerEngine(['html', 'css'], FileEngine::class);
 
-        $app->terminating(static function () use ($bladeEngine) {
+        $kernel->terminating(static function () use ($bladeEngine) {
             Component::flushCache();
             $bladeEngine->forgetCompiledOrNotExpired();
         });
