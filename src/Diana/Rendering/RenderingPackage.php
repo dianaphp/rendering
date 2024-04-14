@@ -9,6 +9,7 @@ use Diana\Rendering\Engines\CompilerEngine;
 use Diana\Rendering\Engines\FileEngine;
 use Diana\Rendering\Engines\PhpEngine;
 use Diana\Runtime\Application;
+use Diana\Runtime\Container;
 use Diana\Runtime\Package;
 use Diana\Support\Helpers\Filesystem;
 
@@ -34,8 +35,8 @@ class RenderingPackage extends Package
     public function getConfigDefault(): array
     {
         return [
-            'cachePath' => './cache/rendering/cached',
-            'compilationPath' => './cache/rendering/compiled',
+            'renderCachePath' => './cache/rendering/cached',
+            'renderCompilationPath' => './cache/rendering/compiled',
 
             'viteEnv' => 'prod',
             'viteHost' => 'http://localhost:3000'
@@ -57,13 +58,13 @@ class RenderingPackage extends Package
         return true;
     }
 
-    public function __construct(private Application $app)
+    public function __construct(Container $container, Application $app)
     {
         $this->loadConfig();
 
-        Component::setCompilationPath(Filesystem::absPath($this->config['compilationPath']));
+        Component::setCompilationPath(Filesystem::absPath($this->config['renderCompilationPath']));
 
-        $compiler = new Compiler(Filesystem::absPath($this->config['cachePath']), false); // TODO: remove last argument to enable caching once everything works
+        $compiler = new Compiler(Filesystem::absPath($this->config['renderCachePath']), false); // TODO: remove last argument to enable caching once everything works
         $compiler->component('dynamic-component', DynamicComponent::class);
         $compiler->directive("vite", function ($entry) {
             $entry = trim($entry, "\"'");
@@ -105,8 +106,8 @@ class RenderingPackage extends Package
             $bladeEngine->forgetCompiledOrNotExpired();
         });
 
-        $app->instance(Compiler::class, $compiler);
-        $app->instance(Renderer::class, $renderer);
+        $container->instance(Compiler::class, $compiler);
+        $container->instance(Renderer::class, $renderer);
     }
 
     public function boot(): void
