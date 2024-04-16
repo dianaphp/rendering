@@ -35,8 +35,8 @@ class RenderingPackage extends Package
     public function getConfigDefault(): array
     {
         return [
-            'renderCachePath' => './cache/rendering/cached',
-            'renderCompilationPath' => './cache/rendering/compiled',
+            'renderCachePath' => './tmp/rendering/cached',
+            'renderCompilationPath' => './tmp/rendering/compiled',
 
             'viteEnv' => 'prod',
             'viteHost' => 'http://localhost:3000'

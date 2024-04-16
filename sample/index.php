@@ -7,9 +7,9 @@ use Diana\Rendering\Compiler;
 use Diana\Rendering\Engines\CompilerEngine;
 use Diana\Rendering\Components\Component;
 
-Component::setCompilationPath(__DIR__ . '/cache/compiled');
+Component::setCompilationPath(__DIR__ . '/tmp/compiled');
 
-$compiler = new Compiler(__DIR__ . '/cache/cached', false);
+$compiler = new Compiler(__DIR__ . '/tmp/cached', false);
 
 $renderer = new Driver($compiler);
 
