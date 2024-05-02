@@ -439,7 +439,7 @@ class BladeComponentTagCompilerTest extends AbstractBladeTestCase
 
     public function testAttributesTreatedAsPropsAreRemovedFromFinalAttributes()
     {
-        $__env = $this->driver;
+        $__env = $this->renderer;
 
         $attributes = new ComponentAttributeBag(['userId' => 'bar', 'other' => 'ok']);
 
@@ -456,7 +456,7 @@ class BladeComponentTagCompilerTest extends AbstractBladeTestCase
 
     public function testOriginalAttributesAreRestoredAfterRenderingChildComponentWithProps()
     {
-        $__env = $this->driver;
+        $__env = $this->renderer;
 
         $attributes = new ComponentAttributeBag(['userId' => 'bar', 'other' => 'ok']);
 
@@ -468,11 +468,11 @@ class BladeComponentTagCompilerTest extends AbstractBladeTestCase
 
         ob_start();
 
-        $this->driver->incrementRenderCount();
+        $this->renderer->incrementRenderCount();
         eval (" ?> $template <?php ");
-        $this->driver->decrementRenderCount();
-        if ($this->driver->doneRendering())
-            $this->driver->flushState();
+        $this->renderer->decrementRenderCount();
+        if ($this->renderer->doneRendering())
+            $this->renderer->flushState();
 
         ob_get_clean();
 

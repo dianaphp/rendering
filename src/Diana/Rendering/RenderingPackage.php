@@ -11,6 +11,7 @@ use Diana\Rendering\Engines\FileEngine;
 use Diana\Rendering\Engines\PhpEngine;
 use Diana\Runtime\Container;
 use Diana\Runtime\Package;
+use Diana\Rendering\Drivers\BladeRenderer;
 use Diana\Support\Helpers\Filesystem;
 
 class RenderingPackage extends Package
@@ -95,7 +96,7 @@ class RenderingPackage extends Package
 
         $bladeEngine = new CompilerEngine($compiler);
 
-        $renderer = new Driver($compiler);
+        $renderer = new BladeRenderer($compiler);
 
         $renderer->registerEngine('blade.php', $bladeEngine);
         $renderer->registerEngine('php', PhpEngine::class);

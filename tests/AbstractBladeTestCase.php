@@ -6,8 +6,7 @@ use Diana\Rendering\Compiler;
 
 use Diana\Rendering\Components\Component;
 
-use Diana\Rendering\Contracts\Renderer;
-use Diana\Rendering\Driver;
+use Diana\Rendering\Drivers\BladeRenderer;
 use Diana\Rendering\Engines\CompilerEngine;
 use Diana\Rendering\Engines\FileEngine;
 use Diana\Rendering\Engines\PhpEngine;
@@ -23,7 +22,7 @@ abstract class AbstractBladeTestCase extends TestCase
 
     protected $compilerEngine;
 
-    protected $driver;
+    protected $renderer;
 
     protected function setUp(): void
     {
@@ -31,13 +30,13 @@ abstract class AbstractBladeTestCase extends TestCase
 
         $this->compiler = new Compiler(sys_get_temp_dir());
 
-        $this->driver = new Driver($this->compiler);
-        $this->driver->registerEngine('blade.php', function () {
+        $this->renderer = new BladeRenderer($this->compiler);
+        $this->renderer->registerEngine('blade.php', function () {
             $this->compilerEngine = new CompilerEngine($this->compiler);
             return $this->compilerEngine;
         });
-        $this->driver->registerEngine('php', PhpEngine::class);
-        $this->driver->registerEngine(['html', 'css'], FileEngine::class);
+        $this->renderer->registerEngine('php', PhpEngine::class);
+        $this->renderer->registerEngine(['html', 'css'], FileEngine::class);
 
         Component::setCompilationPath(sys_get_temp_dir());
     }
