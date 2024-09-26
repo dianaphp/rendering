@@ -12,6 +12,7 @@ use Diana\Rendering\Compiler;
 use Diana\Rendering\Concerns;
 use Diana\Rendering\View;
 
+use Exception;
 use InvalidArgumentException;
 
 class BladeRenderer implements Renderer
@@ -27,7 +28,7 @@ class BladeRenderer implements Renderer
 
     public array $instances = [];
 
-    public function registerEngine(array|string $extensions, string|Engine|callable $engine)
+    public function registerEngine(array|string $extensions, string|Engine|callable $engine): static
     {
         $engine = Data::valueOf($engine);
         $class = is_string($engine) ? $engine : $engine::class;
@@ -42,6 +43,13 @@ class BladeRenderer implements Renderer
     public function make(string $path, array $data = []): View
     {
         return new View($this, Filesystem::absPath($path), $data);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function render(string $path, array $data = []): string {
+        return $this->make($path, $data)->render();
     }
 
     /**
@@ -99,21 +107,21 @@ class BladeRenderer implements Renderer
      *
      * @var array
      */
-    protected $shared = [];
+    protected array $shared = [];
 
     /**
      * The number of active rendering operations.
      *
      * @var int
      */
-    protected $renderCount = 0;
+    protected int $renderCount = 0;
 
     /**
      * The "once" block IDs that have been rendered.
      *
      * @var array
      */
-    protected $renderedOnce = [];
+    protected array $renderedOnce = [];
 
     /**
      * Create a new view factory instance.
@@ -154,17 +162,16 @@ class BladeRenderer implements Renderer
     /**
      * Add a piece of shared data to the environment.
      *
-     * @param  array|string  $key
-     * @param  mixed|null  $value
+     * @param array|string $key
+     * @param mixed|null $value
      * @return mixed
      */
-    public function share($key, $value = null)
+    public function share(array|string $key, mixed $value = null): mixed
     {
         $keys = is_array($key) ? $key : [$key => $value];
 
-        foreach ($keys as $key => $value) {
-            $this->shared[$key] = $value;
-        }
+        foreach ($keys as $k => $v)
+            $this->shared[$k] = $v;
 
         return $value;
     }
@@ -196,7 +203,7 @@ class BladeRenderer implements Renderer
      * @param  string  $id
      * @return bool
      */
-    public function hasRenderedOnce(string $id)
+    public function hasRenderedOnce(string $id): bool
     {
         return isset($this->renderedOnce[$id]);
     }
@@ -207,13 +214,13 @@ class BladeRenderer implements Renderer
      * @param  string  $id
      * @return void
      */
-    public function markAsRenderedOnce(string $id)
+    public function markAsRenderedOnce(string $id): void
     {
         $this->renderedOnce[$id] = true;
     }
 
     /**
-     * Flush all of the factory state like sections and stacks.
+     * Flush all the factory state like sections and stacks.
      *
      * @return void
      */
@@ -233,7 +240,7 @@ class BladeRenderer implements Renderer
      *
      * @return array
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return array_keys($this->extensions);
     }

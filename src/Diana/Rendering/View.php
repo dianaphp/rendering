@@ -2,12 +2,13 @@
 
 namespace Diana\Rendering;
 
-use Diana\Rendering\Contracts\Renderer;
+use Diana\Rendering\Drivers\BladeRenderer;
+use Exception;
 use Stringable;
 
 class View implements Stringable
 {
-    public function __construct(protected Renderer $renderer, protected string $path, protected array $data = [])
+    public function __construct(protected BladeRenderer $renderer, protected string $path, protected array $data = [])
     {
     }
 
@@ -27,11 +28,17 @@ class View implements Stringable
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function __toString(): string
     {
         return $this->render();
     }
 
+    /**
+     * @throws Exception
+     */
     public function render(): string
     {
         try {
@@ -56,7 +63,7 @@ class View implements Stringable
                 $this->renderer->flushState();
 
             return $content;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->renderer->flushState();
 
             throw $e;
