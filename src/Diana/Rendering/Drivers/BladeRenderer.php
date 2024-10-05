@@ -6,7 +6,6 @@ use Diana\Rendering\Contracts\Renderer;
 use Diana\Rendering\Contracts\Engine;
 use Diana\Support\Helpers\Arr;
 use Diana\Support\Helpers\Data;
-use Diana\Support\Helpers\Filesystem;
 
 use Diana\Rendering\Compiler;
 use Diana\Rendering\Concerns;
@@ -42,13 +41,14 @@ class BladeRenderer implements Renderer
 
     public function make(string $path, array $data = []): View
     {
-        return new View($this, Filesystem::absPath($path), $data);
+        return new View($this, $path, $data);
     }
 
     /**
      * @throws Exception
      */
-    public function render(string $path, array $data = []): string {
+    public function render(string $path, array $data = []): string
+    {
         return $this->make($path, $data)->render();
     }
 
