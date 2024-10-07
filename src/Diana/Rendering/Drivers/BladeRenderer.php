@@ -46,9 +46,9 @@ class BladeRenderer implements RendererInterface
     /**
      * @throws Exception
      */
-    public function render(string $path, array $data = []): string
+    public function render(string $input, array $data = []): string
     {
-        return $this->make($path, $data)->render();
+        return $this->make($input, $data)->render();
     }
 
     /**
