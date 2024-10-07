@@ -2,14 +2,13 @@
 
 namespace Diana\Rendering\Components;
 
-use Diana\Rendering\Contracts\Renderer;
+use Diana\Rendering\Drivers\BladeRenderer;
 use Diana\Rendering\View;
 
 class AnonymousComponent extends Component
 {
-    public function __construct(public Renderer $renderer, public string $view, public array $data = [])
+    public function __construct(public BladeRenderer $renderer, public string $view, public array $data = [])
     {
-
     }
 
     public function render(): View
@@ -22,7 +21,7 @@ class AnonymousComponent extends Component
      *
      * @return array
      */
-    public function data()
+    public function data(): array
     {
         $this->attributes = $this->attributes ?: $this->newAttributeBag();
 

@@ -2,26 +2,24 @@
 
 namespace Diana\Rendering\Drivers;
 
-use Diana\Rendering\Contracts\Renderer;
+use Diana\Drivers\RendererInterface;
 use Diana\Rendering\Contracts\Engine;
 use Diana\Support\Helpers\Arr;
 use Diana\Support\Helpers\Data;
-
 use Diana\Rendering\Compiler;
 use Diana\Rendering\Concerns;
 use Diana\Rendering\View;
-
 use Exception;
 use InvalidArgumentException;
 
-class BladeRenderer implements Renderer
+class BladeRenderer implements RendererInterface
 {
-    use Concerns\ManagesComponents,
-        Concerns\ManagesFragments,
-        Concerns\ManagesLayouts,
-        Concerns\ManagesLoops,
-        Concerns\ManagesStacks,
-        Concerns\ManagesTranslations;
+    use Concerns\ManagesComponents;
+    use Concerns\ManagesFragments;
+    use Concerns\ManagesLayouts;
+    use Concerns\ManagesLoops;
+    use Concerns\ManagesStacks;
+    use Concerns\ManagesTranslations;
 
     public array $extensions = [];
 
@@ -31,10 +29,11 @@ class BladeRenderer implements Renderer
     {
         $engine = Data::valueOf($engine);
         $class = is_string($engine) ? $engine : $engine::class;
-        foreach (Arr::wrap($extensions) as $extension)
+        foreach (Arr::wrap($extensions) as $extension) {
             $this->extensions[$extension] = $class;
+        }
 
-        $this->instances[$class] = $engine instanceof Engine ? $engine : new $engine;
+        $this->instances[$class] = $engine instanceof Engine ? $engine : new $engine();
 
         return $this;
     }
@@ -144,8 +143,9 @@ class BladeRenderer implements Renderer
      */
     public function getEngineFromPath($path): Engine
     {
-        if (!$extension = $this->getExtension($path))
+        if (!$extension = $this->getExtension($path)) {
             throw new InvalidArgumentException("Unrecognized extension in file: {$path}.");
+        }
 
         return $this->instances[$this->extensions[$extension]];
     }
@@ -170,8 +170,9 @@ class BladeRenderer implements Renderer
     {
         $keys = is_array($key) ? $key : [$key => $value];
 
-        foreach ($keys as $k => $v)
+        foreach ($keys as $k => $v) {
             $this->shared[$k] = $v;
+        }
 
         return $value;
     }

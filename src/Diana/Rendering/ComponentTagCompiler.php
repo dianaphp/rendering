@@ -234,12 +234,14 @@ class ComponentTagCompiler
     protected function componentString(string $component, array $attributes)
     {
         if (isset($this->aliases[$component])) {
-            if (!class_exists($this->aliases[$component]))
+            if (!class_exists($this->aliases[$component])) {
                 throw new InvalidArgumentException("Unable to locate a class or view for component [{$component}].");
+            }
 
             $class = $this->aliases[$component];
-        } else
+        } else {
             $class = '\\' . Str::formatClass($component);
+        }
 
         [$data, $attributes] = self::partitionDataAndAttributes($class, $attributes);
 
@@ -249,13 +251,14 @@ class ComponentTagCompiler
 
         // If the component doesn't exist as a class, we'll assume it's a class-less
         // component and pass the component as a view parameter to the data so it
-        // can be accessed within the component and we can render out the view.
+        // can be accessed within the component, and we can render out the view.
         if (!class_exists($class)) {
-            $view = Filesystem::absPath('./' . str_replace(':', '/', $component));
-            if (file_exists($view))
+            $view = str_replace(':', '/', $component);
+            if (file_exists($view)) {
                 $view = "'$view'";
-            else
+            } else {
                 throw new InvalidArgumentException("Unable to locate a class or view for component [{$component}].");
+            }
 
             $parameters = [
                 'view' => $view,
@@ -284,7 +287,7 @@ class ComponentTagCompiler
     public static function partitionDataAndAttributes($class, array $attributes)
     {
         // If the class doesn't exist, we'll assume it is a class-less component and
-        // return all of the attributes as both data and attributes since we have
+        // return all the attributes as both data and attributes since we have
         // now way to partition them. The user can exclude attributes manually.
         if (!class_exists($class)) {
             return [$attributes, $attributes];
