@@ -231,7 +231,6 @@ abstract class Component
             $reflection = new ReflectionClass($this);
 
             $methods = array_filter($reflection->getMethods(ReflectionMethod::IS_PUBLIC), fn(ReflectionMethod $method) => !$this->shouldIgnore($method->getName()));
-            ;
 
             static::$methodCache[$class] = array_map(fn(ReflectionMethod $method) => $method->getName(), $methods);
         }

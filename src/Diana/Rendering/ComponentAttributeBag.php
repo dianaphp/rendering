@@ -239,7 +239,7 @@ class ComponentAttributeBag implements ArrayAccess, IteratorAggregate, JsonSeria
         $attributes = $this->attributes;
         foreach ($attributes as $key => $value) {
             if ($key === 'class' || $key === 'style' || (isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof AppendableAttributeValue))
-                Arr::mapWithKeys($attributes[$key], function ($value, $key) use ($attributeDefaults, $escape) {
+                Arr::mapWithKeys($value, function ($value, $key) use ($attributeDefaults, $escape) {
                     $defaultsValue = isset ($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof AppendableAttributeValue
                         ? $this->resolveAppendableAttributeDefault($attributeDefaults, $key, $escape)
                         : ($attributeDefaults[$key] ?? '');

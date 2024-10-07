@@ -32,7 +32,6 @@ class CompilerEngine extends PhpEngine implements Engine
      */
     public function __construct(protected Compiler $compiler)
     {
-        $this->compiler = $compiler;
     }
 
     /**

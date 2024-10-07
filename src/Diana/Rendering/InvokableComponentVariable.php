@@ -13,14 +13,14 @@ class InvokableComponentVariable implements IteratorAggregate, Stringable
     /**
      * The callable instance to resolve the variable value.
      *
-     * @var \Closure
+     * @var Closure
      */
-    protected $callable;
+    protected Closure $callable;
 
     /**
      * Create a new variable instance.
      *
-     * @param  \Closure  $callable
+     * @param  Closure  $callable
      * @return void
      */
     public function __construct(Closure $callable)
@@ -31,7 +31,7 @@ class InvokableComponentVariable implements IteratorAggregate, Stringable
     /**
      * Get an iterator instance for the variable.
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator(): Traversable
     {
@@ -43,10 +43,10 @@ class InvokableComponentVariable implements IteratorAggregate, Stringable
     /**
      * Dynamically proxy attribute access to the variable.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         return $this->__invoke()->{$key};
     }
@@ -54,11 +54,11 @@ class InvokableComponentVariable implements IteratorAggregate, Stringable
     /**
      * Dynamically proxy method access to the variable.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         return $this->__invoke()->{$method}(...$parameters);
     }
@@ -68,17 +68,12 @@ class InvokableComponentVariable implements IteratorAggregate, Stringable
      *
      * @return mixed
      */
-    public function __invoke()
+    public function __invoke(): mixed
     {
         return call_user_func($this->callable);
     }
 
-    /**
-     * Resolve the variable as a string.
-     *
-     * @return mixed
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->__invoke();
     }

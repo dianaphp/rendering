@@ -4,6 +4,7 @@ namespace Diana\Rendering;
 
 use Closure;
 
+use Diana\Support\Exceptions\FileNotFoundException;
 use Diana\Support\Helpers\Filesystem;
 use Diana\Support\Helpers\Arr;
 use Diana\Support\Helpers\Str;
@@ -222,15 +223,16 @@ class Compiler
      *
      * @var bool
      */
-    protected $compilesComponentTags = true;
+    protected bool $compilesComponentTags = true;
 
     /**
      * Compile the view at the given path.
      *
-     * @param  string|null  $path
+     * @param string|null $path
      * @return void
+     * @throws FileNotFoundException
      */
-    public function compile($path = null)
+    public function compile(string $path = null): void
     {
         if ($path) {
             $this->setPath($path);

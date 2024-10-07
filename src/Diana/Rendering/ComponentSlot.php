@@ -92,7 +92,7 @@ class ComponentSlot implements Stringable
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->contents;
     }
