@@ -17,7 +17,7 @@ class View implements Stringable
         return $this->path;
     }
 
-    public function with($key, $value = null)
+    public function with($key, $value = null): static
     {
         if (is_array($key)) {
             $this->data = array_merge($this->data, $key);
@@ -59,8 +59,9 @@ class View implements Stringable
             // Once we have the contents of the view, we will flush the sections if we are
             // done rendering all views so that there is nothing left hanging over when
             // another view gets rendered in the future by the application developer.
-            if ($this->renderer->doneRendering())
+            if ($this->renderer->doneRendering()) {
                 $this->renderer->flushState();
+            }
 
             return $content;
         } catch (Exception $e) {
