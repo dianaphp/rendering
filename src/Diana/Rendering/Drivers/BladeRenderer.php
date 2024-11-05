@@ -2,7 +2,7 @@
 
 namespace Diana\Rendering\Drivers;
 
-use Diana\Drivers\RendererInterface;
+use Diana\Contracts\RendererContract;
 use Diana\Rendering\Contracts\Engine;
 use Diana\Support\Helpers\Arr;
 use Diana\Support\Helpers\Data;
@@ -12,7 +12,7 @@ use Diana\Rendering\View;
 use Exception;
 use InvalidArgumentException;
 
-class BladeRenderer implements RendererInterface
+class BladeRenderer implements RendererContract
 {
     use Concerns\ManagesComponents;
     use Concerns\ManagesFragments;
