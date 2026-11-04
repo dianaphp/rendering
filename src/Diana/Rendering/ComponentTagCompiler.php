@@ -250,9 +250,9 @@ class ComponentTagCompiler
         // component and pass the component as a view parameter to the data so it
         // can be accessed within the component, and we can render out the view.
         if (!class_exists($class)) {
-            $view = str_replace(':', '/', $component);
-            if (file_exists($view)) {
-                $view = "'$view'";
+            $view = $this->blade->resolveComponentPath($component);
+            if (is_file($view)) {
+                $view = var_export($view, true);
             } else {
                 throw new InvalidArgumentException("Unable to locate a class or view for component [{$component}].");
             }

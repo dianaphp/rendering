@@ -196,7 +196,7 @@ trait CompilesConditionals
      * @param string|null $id
      * @return string
      */
-    protected function compileOnce(string $id = null): string
+    protected function compileOnce(?string $id = null): string
     {
         $id = $id ? $this->stripParentheses($id) : "'" . UUID::v4() . "'";
 

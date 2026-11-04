@@ -25,7 +25,7 @@ abstract class AbstractBladeTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->compiler = new Compiler(sys_get_temp_dir());
+        $this->compiler = new Compiler(sys_get_temp_dir(), viewBasePath: __DIR__);
 
         $this->renderer = new BladeRenderer($this->compiler);
         $this->renderer->registerEngine('blade.php', function () {

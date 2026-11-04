@@ -408,6 +408,21 @@ class BladeComponentTagCompilerTest extends AbstractBladeTestCase
             '@endComponentClass##END-COMPONENT-CLASS##', trim($result));
     }
 
+    public function testClasslessComponentsResolveIndependentlyOfWorkingDirectory(): void
+    {
+        $cwd = getcwd();
+        try {
+            chdir(sys_get_temp_dir());
+            $result = $this->compiler()->compileTags('<x-res:anonymous-component.blade.php />');
+            self::assertStringContainsString(
+                "'view' => " . var_export(__DIR__ . '/res/anonymous-component.blade.php', true),
+                $result
+            );
+        } finally {
+            chdir($cwd);
+        }
+    }
+
     public function testAttributeSanitization()
     {
         $class = new class {

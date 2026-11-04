@@ -40,7 +40,7 @@ class RenderingPackage
     {
         Component::setCompilationPath($this->app->path($this->config->get('renderCompilationPath')));
 
-        $compiler = new Compiler($this->app->path($this->config->get('renderCachePath')), false);
+        $compiler = new Compiler($this->app->path($this->config->get('renderCachePath')), false, viewBasePath: $this->app->path(''));
         $bladeEngine = new CompilerEngine($compiler);
 
         $this->dispatcher->addEventListener(ShutdownEvent::class, function () use ($bladeEngine) {
@@ -62,7 +62,7 @@ class RenderingPackage
         $loader = new FilesystemLoader($this->app->path('res'));
         $environment = new Environment($loader, [
             'cache' => $this->app->path($this->config->get('renderCachePath')),
-            'debug' => true
+            'debug' => ($this->appConfig->all()['env'] ?? null) === 'dev'
         ]);
 
         return new TwigRenderer($loader, $environment);

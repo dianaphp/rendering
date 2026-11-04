@@ -49,8 +49,18 @@ class Compiler
     public function __construct(
         protected string $cachePath,
         protected bool $shouldCache = true,
-        protected string $compiledExtension = 'php'
+        protected string $compiledExtension = 'php',
+        protected string $viewBasePath = '.'
     ) {
+    }
+
+    public function resolveComponentPath(string $component): string
+    {
+        $absolute = str_starts_with($component, DIRECTORY_SEPARATOR)
+            || preg_match('~^[A-Za-z]:[\\\\/]~', $component);
+        $path = $absolute ? $component : $this->viewBasePath . DIRECTORY_SEPARATOR
+            . str_replace(':', DIRECTORY_SEPARATOR, $component);
+        return realpath($path) ?: $path;
     }
 
     /**
@@ -61,7 +71,7 @@ class Compiler
      */
     public function getCompiledPath($path)
     {
-        return $this->cachePath . '/' . hash('xxh128', 'v3' . $path) . '.' . $this->compiledExtension;
+        return $this->cachePath . '/' . hash('xxh128', 'v4' . $this->viewBasePath . $path) . '.' . $this->compiledExtension;
     }
 
     /**
@@ -232,7 +242,7 @@ class Compiler
      * @return void
      * @throws FileNotFoundException
      */
-    public function compile(string $path = null): void
+    public function compile(?string $path = null): void
     {
         if ($path) {
             $this->setPath($path);
