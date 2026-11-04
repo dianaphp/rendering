@@ -31,7 +31,10 @@
     "require": {
         "php": ">=8.0",
         "dianaphp/lib": "dev-main",
-        "ramsey/uuid": "^5.0"
+        "ramsey/uuid": "^5.0",
+        "dianaphp/sdk": "dev-main",
+        "twig/twig": "^3.0",
+        "dianaphp/framework": "dev-main"
     },
     "require-dev": {
         "phpunit/phpunit": "*"

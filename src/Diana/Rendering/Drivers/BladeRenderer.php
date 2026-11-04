@@ -3,6 +3,9 @@
 namespace Diana\Rendering\Drivers;
 
 use Diana\Contracts\RendererContract;
+use Diana\Contracts\Core\Container;
+use Diana\Contracts\Config\Config;
+use LogicException;
 use Diana\Rendering\Contracts\Engine;
 use Diana\Support\Helpers\Arr;
 use Diana\Support\Helpers\Data;
@@ -127,10 +130,42 @@ class BladeRenderer implements RendererContract
      *
      * @return void
      */
-    public function __construct(Compiler $compiler)
+    public function __construct(
+        protected Compiler $compiler,
+        protected ?Container $container = null,
+        protected ?Config $config = null
+    )
     {
         $this->share('__env', $this);
         $this->share('__compiler', $compiler);
+    }
+
+    public function getCompiler(): Compiler
+    {
+        return $this->compiler;
+    }
+
+    public function environment(string|array ...$environments): bool
+    {
+        if ($this->config === null) {
+            throw new LogicException('Environment directives require an application configuration.');
+        }
+
+        $names = [];
+        foreach ($environments as $environment) {
+            array_push($names, ...(array) $environment);
+        }
+
+        return in_array($this->config->get('env'), $names, true);
+    }
+
+    public function inject(string $service): mixed
+    {
+        if ($this->container === null) {
+            throw new LogicException('The inject directive requires a container.');
+        }
+
+        return $this->container->make($service);
     }
 
     /**

@@ -61,7 +61,7 @@ class Compiler
      */
     public function getCompiledPath($path)
     {
-        return $this->cachePath . '/' . hash('xxh128', 'v2' . $path) . '.' . $this->compiledExtension;
+        return $this->cachePath . '/' . hash('xxh128', 'v3' . $path) . '.' . $this->compiledExtension;
     }
 
     /**

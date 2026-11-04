@@ -2,16 +2,14 @@
 
 namespace Diana\Rendering\Drivers;
 
-use Diana\Rendering\Contracts\Engine;
-use Diana\Rendering\Contracts\Renderer;
-use Diana\Rendering\View;
+use Diana\Contracts\RendererContract;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Loader\LoaderInterface;
 
-class TwigRenderer implements Renderer {
+class TwigRenderer implements RendererContract {
 
     public function __construct(private LoaderInterface $loader, private Environment $environment) {
     }
@@ -21,8 +19,8 @@ class TwigRenderer implements Renderer {
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function render(string $path, array $data = []): string
+    public function render(string $input, array $data = []): string
     {
-        return $this->environment->render($path, $data);
+        return $this->environment->render($input, $data);
     }
 }

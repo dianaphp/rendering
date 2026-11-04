@@ -10,7 +10,6 @@ use Diana\Rendering\Drivers\BladeRenderer;
 use Diana\Rendering\Engines\CompilerEngine;
 use Diana\Rendering\Engines\FileEngine;
 use Diana\Rendering\Engines\PhpEngine;
-use Diana\Support\Helpers\Filesystem;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractBladeTestCase extends TestCase
@@ -26,8 +25,6 @@ abstract class AbstractBladeTestCase extends TestCase
 
     protected function setUp(): void
     {
-        Filesystem::setBasePath(__DIR__);
-
         $this->compiler = new Compiler(sys_get_temp_dir());
 
         $this->renderer = new BladeRenderer($this->compiler);

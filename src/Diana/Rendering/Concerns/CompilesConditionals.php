@@ -22,7 +22,7 @@ trait CompilesConditionals
      */
     protected function compileEnv(string $environments): string
     {
-        return "<?php if(app()->environment{$environments}): ?>";
+        return "<?php if(\$__env->environment{$environments}): ?>";
     }
 
     /**
@@ -42,7 +42,7 @@ trait CompilesConditionals
      */
     protected function compileProduction(): string
     {
-        return "<?php if(app()->environment('production')): ?>";
+        return "<?php if(\$__env->environment('production')): ?>";
     }
 
     /**
