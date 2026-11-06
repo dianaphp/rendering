@@ -8,13 +8,14 @@ use Diana\Contracts\Event\Dispatcher;
 use Diana\Contracts\RendererContract;
 use Diana\Events\ShutdownEvent;
 use Diana\Framework\Core\Application;
+use Diana\Framework\Core\Environment;
 use Diana\Rendering\Components\Component;
 use Diana\Rendering\Drivers\BladeRenderer;
 use Diana\Rendering\Drivers\TwigRenderer;
 use Diana\Rendering\Engines\CompilerEngine;
 use Diana\Rendering\Engines\FileEngine;
 use Diana\Rendering\Engines\PhpEngine;
-use Twig\Environment;
+use Twig\Environment as TwigEnvironment;
 use Twig\Loader\FilesystemLoader;
 
 class RenderingPackage
@@ -24,7 +25,7 @@ class RenderingPackage
         protected Application $app,
         #[Config('rendering')] protected Config $config,
         protected Dispatcher $dispatcher,
-        #[Config('framework')] protected Config $appConfig
+        protected Environment $environment
     ) {
         $config->addDefault($this->getDefaultConfig());
 
@@ -48,7 +49,7 @@ class RenderingPackage
             $bladeEngine->forgetCompiledOrNotExpired();
         });
 
-        $renderer = new BladeRenderer($compiler, $this->container, $this->appConfig);
+        $renderer = new BladeRenderer($compiler, $this->container, $this->environment);
 
         $renderer->registerEngine('blade.php', $bladeEngine);
         $renderer->registerEngine('php', PhpEngine::class);
@@ -60,9 +61,9 @@ class RenderingPackage
     public function twigRenderer(): TwigRenderer
     {
         $loader = new FilesystemLoader($this->app->path('res'));
-        $environment = new Environment($loader, [
+        $environment = new TwigEnvironment($loader, [
             'cache' => $this->app->path($this->config->get('renderCachePath')),
-            'debug' => ($this->appConfig->all()['env'] ?? null) === 'dev'
+            'debug' => $this->environment->is(Environment::DEV)
         ]);
 
         return new TwigRenderer($loader, $environment);

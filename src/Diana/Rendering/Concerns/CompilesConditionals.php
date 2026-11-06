@@ -2,6 +2,7 @@
 
 namespace Diana\Rendering\Concerns;
 
+use Diana\Framework\Core\Environment;
 use Diana\Rendering\Helpers\UUID;
 use Diana\Support\Helpers\Str;
 
@@ -42,7 +43,7 @@ trait CompilesConditionals
      */
     protected function compileProduction(): string
     {
-        return "<?php if(\$__env->environment('production')): ?>";
+        return "<?php if(\$__env->environment(" . var_export(Environment::PROD, true) . ")): ?>";
     }
 
     /**

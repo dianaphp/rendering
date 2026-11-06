@@ -5,6 +5,7 @@ namespace Diana\Tests;
 use Diana\Config\Config;
 use Diana\Contracts\RendererContract;
 use Diana\Framework\Core\Application;
+use Diana\Framework\Core\Environment;
 use Diana\IO\Event\NullDispatcher;
 use Diana\Rendering\Compiler;
 use Diana\Rendering\Drivers\BladeRenderer;
@@ -21,7 +22,7 @@ class RenderingPackageTest extends TestCase
         $app = $this->createMock(Application::class);
         $app->method('path')->willReturnCallback(static fn(string $path) => $path === 'res' ? __DIR__ . '/res' : sys_get_temp_dir() . '/' . $path);
         $config = new Config('rendering');
-        $package = new RenderingPackage($container, $app, $config, new NullDispatcher($container), new Config());
+        $package = new RenderingPackage($container, $app, $config, new NullDispatcher($container), new Environment());
         // Config's in-memory implementation keeps defaults separate from values.
         foreach ($package->getDefaultConfig() as $key => $value) {
             $config->set($key, $value);

@@ -2,7 +2,7 @@
 
 namespace Diana\Tests;
 
-use Diana\Config\Config;
+use Diana\Framework\Core\Environment as AppEnvironment;
 use Diana\Contracts\RendererContract;
 use Diana\Rendering\Compiler;
 use Diana\Rendering\Drivers\BladeRenderer;
@@ -23,19 +23,19 @@ class RendererIntegrationTest extends TestCase
         self::assertSame('Hello &lt;Diana&gt;', $renderer->render('hello', ['name' => '<Diana>']));
     }
 
-    public function testBladeDirectivesUseTheProvidedContainerAndConfiguration(): void
+    public function testBladeDirectivesUseTheProvidedContainerAndEnvironment(): void
     {
         $directory = sys_get_temp_dir() . '/diana-directives-' . bin2hex(random_bytes(6));
         mkdir($directory);
         $path = $directory . '/template.blade.php';
         file_put_contents($path, <<<'BLADE'
-@env('staging', 'production')
+@env('staging', \Diana\Framework\Core\Environment::PROD)
 yes
 @else
 no
 @endenv
 |
-@env(['staging', 'production'])
+@env(['staging', \Diana\Framework\Core\Environment::PROD])
 yes
 @else
 no
@@ -53,15 +53,18 @@ BLADE);
         $compiler = new Compiler($directory, false);
         $container = new IlluminateContainer();
         $container->instance('test.service', (object) ['name' => 'Diana']);
-        $config = new Config();
-        $renderer = new BladeRenderer($compiler, $container, $config);
+        $previous = getenv('APP_ENV');
+        putenv('APP_ENV');
+        $environment = new AppEnvironment();
+        $renderer = new BladeRenderer($compiler, $container, $environment);
         $renderer->registerEngine('blade.php', new CompilerEngine($compiler));
         try {
-            $config->set('env', 'production');
+            $environment->configure(AppEnvironment::PROD);
             self::assertSame('yes|yes|yes|Diana', preg_replace('/\s+/', '', $renderer->render($path)));
-            $config->set('env', 'dev');
+            $environment->configure(AppEnvironment::DEV);
             self::assertSame('no|no|no|Diana', preg_replace('/\s+/', '', $renderer->render($path)));
         } finally {
+            putenv($previous === false ? 'APP_ENV' : 'APP_ENV=' . $previous);
             foreach (glob($directory . '/*') as $file) {
                 unlink($file);
             }

@@ -4,7 +4,7 @@ namespace Diana\Rendering\Drivers;
 
 use Diana\Contracts\RendererContract;
 use Diana\Contracts\Core\Container;
-use Diana\Contracts\Config\Config;
+use Diana\Framework\Core\Environment;
 use LogicException;
 use Diana\Rendering\Contracts\Engine;
 use Diana\Support\Helpers\Arr;
@@ -133,7 +133,7 @@ class BladeRenderer implements RendererContract
     public function __construct(
         protected Compiler $compiler,
         protected ?Container $container = null,
-        protected ?Config $config = null
+        protected ?Environment $environment = null
     )
     {
         $this->share('__env', $this);
@@ -147,8 +147,8 @@ class BladeRenderer implements RendererContract
 
     public function environment(string|array ...$environments): bool
     {
-        if ($this->config === null) {
-            throw new LogicException('Environment directives require an application configuration.');
+        if ($this->environment === null) {
+            throw new LogicException('Environment directives require an application environment.');
         }
 
         $names = [];
@@ -156,7 +156,7 @@ class BladeRenderer implements RendererContract
             array_push($names, ...(array) $environment);
         }
 
-        return in_array($this->config->get('env'), $names, true);
+        return $this->environment->is(...$names);
     }
 
     public function inject(string $service): mixed
